@@ -1,4 +1,5 @@
 import { Mesh, MeshBasicMaterial, MeshPhongMaterial, HemisphereLight, RingBufferGeometry, PerspectiveCamera, TextureLoader, Scene, SphereGeometry, WebGLRenderer } from "/build/three.module.js";
+import { ARButton } from '/jsm/webxr/ARbutton';
 
 // Scene
 const canvas = <HTMLCanvasElement> document.getElementById( "canvas" );
@@ -33,7 +34,7 @@ const materialClouds = new MeshPhongMaterial( {
 // Geometry radius, width segment, height segment
 const geometry = new SphereGeometry( 0.5, 14, 14 ).translate( 0, 0.1, 0 );
 const earth: Mesh = new Mesh( geometry, material );
-const cloudGeometry = new SphereGeometry( 0.55, 14, 14 ).translate( 0, 0.1, 0 );
+const cloudGeometry = new SphereGeometry( 0.508, 14, 14 ).translate( 0, 0.1, 0 );
 const clouds = new Mesh( cloudGeometry, materialClouds );
 
 init();
@@ -42,9 +43,9 @@ animate();
 function init () {
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
-
+    document.body.appendChild( ARButton.createButton( renderer, { requiredFeatures: [ "hit-test" ] } ) );
     // xr
-    //renderer.xr.enabled = true;
+    renderer.xr.enabled = true;
 
     //light
     const light = new HemisphereLight( 0xffffff, 0xbbbbff, 1 );
@@ -70,8 +71,8 @@ function onWindowResize () {
 }
 
 function animate () {
-    requestAnimationFrame( animate );
-    // renderer.setAnimationLoop(animate);
+    //requestAnimationFrame( animate );
+    renderer.setAnimationLoop( animate );
     earth.rotation.y += 0.001;
     clouds.rotation.y += 0.002;
     render();
